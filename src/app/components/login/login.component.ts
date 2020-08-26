@@ -1,6 +1,10 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
 import { Empleado } from '../Models/Empleado';
 import { LoginService } from 'src/app/services/login.service';
+import { ApiResponse } from '../Models/ApiResponse/ApiResponse';
+
 
 @Component({
   selector: 'app-login',
@@ -9,7 +13,8 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class LoginComponent implements OnInit {
   //#region  Constructor
-  constructor(private servicio: LoginService) { }
+  constructor(private servicio: LoginService,
+              private router: Router) { }
   //#endregion
 
   //#region  Propiedades
@@ -23,8 +28,10 @@ export class LoginComponent implements OnInit {
   }
 
   IniciarSesion():void{
-    this.servicio.logIn(this.empleado).subscribe( (response)=>{
-      console.log(response);
+    this.servicio.logIn(this.empleado).subscribe((response: ApiResponse<Empleado>)=>{
+      if (response.exito == 1){
+        this.router.navigateByUrl('home');
+      }
     });
   }
 
